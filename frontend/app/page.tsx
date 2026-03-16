@@ -177,10 +177,11 @@ export default function LandingPage() {
                          <div className="w-12 h-12 rounded-full border-4 border-gray-200 border-t-indigo-500 animate-spin"></div>
                        </div>
                        <div className="w-2/3 h-4 bg-gray-200 rounded"></div>
-                       <div className="w-1/3 h-6 bg-gray-200 rounded mt-2"></div>
-                    </motion.div>
+                        <div className="w-1/3 h-6 bg-gray-200 rounded mt-2"></div>
+                     </motion.div>
                   </div>
                 </div>
+              </div>
             </motion.div>
         </motion.div>
 
