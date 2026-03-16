@@ -16,12 +16,41 @@ export default function LandingPage() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" as const }
+      scale: 1,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
     },
+  };
+
+  const mockupContainerVariants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { 
+        duration: 1, 
+        ease: [0.16, 1, 0.3, 1] as const,
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const floatingAnimation = {
+    y: [0, -15, 0],
+    transition: {
+      duration: 5,
+      repeat: Infinity,
+      ease: "easeInOut" as const
+    }
+  };
+
+  const mockupItemVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: "backOut" as const } }
   };
 
   return (
@@ -88,11 +117,11 @@ export default function LandingPage() {
               variants={itemVariants}
               className="flex justify-center flex-col sm:flex-row gap-4"
             >
-              <Link href="/register" className="group flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-indigo-700 transition-all shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)] hover:shadow-[0_0_60px_-15px_rgba(79,70,229,0.7)] hover:-translate-y-1">
+              <Link href="/register" className="group flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all transform hover:scale-105 active:scale-95 shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)] hover:shadow-[0_0_60px_-15px_rgba(79,70,229,0.7)] hover:bg-indigo-500">
                 Track for Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="#how-it-works" className="flex items-center justify-center px-8 py-4 rounded-2xl font-semibold text-lg text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all">
+              <Link href="#how-it-works" className="flex items-center justify-center px-8 py-4 rounded-2xl font-semibold text-lg text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all hover:border-gray-300">
                 See how it works
               </Link>
             </motion.div>
@@ -101,13 +130,16 @@ export default function LandingPage() {
 
         {/* Dashboard Preview Image (Mockup) */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-32"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="rounded-[2rem] p-2 bg-gray-900/5 shadow-2xl ring-1 ring-gray-900/10 backdrop-blur-3xl">
+          <motion.div 
+            variants={mockupContainerVariants}
+            animate={floatingAnimation}
+            className="rounded-[2rem] p-2 bg-gray-900/5 shadow-2xl ring-1 ring-gray-900/10 backdrop-blur-3xl"
+          >
             <div className="rounded-[1.5rem] overflow-hidden bg-white border border-gray-100 flex shadow-sm">
                 <div className="w-full aspect-[16/9] bg-gray-50 relative flex flex-col">
                   {/* Mock Dash header */}
@@ -120,26 +152,36 @@ export default function LandingPage() {
                   </div>
                   {/* Mock Dash Content */}
                   <div className="p-8 flex gap-6 h-full items-center justify-center bg-gray-50/50">
-                    <div className="w-1/3 h-full max-h-64 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
-                       <div className="w-3/4 h-4 bg-gray-200 rounded animate-pulse"></div>
-                       <div className="w-1/2 h-8 bg-indigo-100 rounded mt-4 animate-pulse"></div>
+                    <motion.div variants={mockupItemVariants} className="w-1/3 h-full max-h-64 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+                       <div className="w-3/4 h-4 bg-gray-200 rounded"></div>
+                       <motion.div 
+                         initial={{ width: "0%" }}
+                         whileInView={{ width: "50%" }}
+                         transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+                         className="h-8 bg-indigo-100 rounded mt-4"
+                       />
                        <div className="w-full h-32 bg-gray-50 rounded mt-6 border border-gray-100 flex items-end p-2 gap-1 overflow-hidden">
                           {[40, 70, 45, 90, 60, 30].map((h, i) => (
-                            <div key={i} className="flex-1 bg-indigo-500 rounded-t" style={{height: `${h}%`}}></div>
+                            <motion.div 
+                              key={i} 
+                              initial={{ height: 0 }}
+                              whileInView={{ height: `${h}%` }}
+                              transition={{ duration: 0.6, delay: 0.5 + (i * 0.1), ease: "backOut" }}
+                              className="flex-1 bg-indigo-500 rounded-t" 
+                            />
                           ))}
                        </div>
-                    </div>
-                    <div className="w-1/3 h-full max-h-64 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between opacity-50 scale-95 transform">
+                    </motion.div>
+                    <motion.div variants={mockupItemVariants} className="w-1/3 h-full max-h-64 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between opacity-50 scale-95 transform">
                        <div className="w-full h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
                          <div className="w-12 h-12 rounded-full border-4 border-gray-200 border-t-indigo-500 animate-spin"></div>
                        </div>
-                       <div className="w-2/3 h-4 bg-gray-200 rounded animate-pulse"></div>
-                       <div className="w-1/3 h-6 bg-gray-200 rounded mt-2 animate-pulse"></div>
-                    </div>
+                       <div className="w-2/3 h-4 bg-gray-200 rounded"></div>
+                       <div className="w-1/3 h-6 bg-gray-200 rounded mt-2"></div>
+                    </motion.div>
                   </div>
                 </div>
-            </div>
-          </div>
+            </motion.div>
         </motion.div>
 
         {/* Features Grid */}
@@ -149,38 +191,38 @@ export default function LandingPage() {
             <p className="mt-4 text-lg text-gray-500">We handle the constant refreshing and checking, so you only need to act when the time is right.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid md:grid-cols-3 gap-8"
+          >
             {[
               {
                 icon: <TrendingDown className="w-6 h-6 text-indigo-600" />,
                 title: "Automated Tracking",
-                description: "Paste a URL and let us do the rest. We check prices multiple times a day.",
-                delay: 0
+                description: "Paste a URL and let us do the rest. We check prices multiple times a day."
               },
               {
                 icon: <Bell className="w-6 h-6 text-violet-600" />,
                 title: "Instant Notifications",
-                description: "The moment the price drops below your tracked amount, an email hits your inbox.",
-                delay: 0.2
+                description: "The moment the price drops below your tracked amount, an email hits your inbox."
               },
               {
                 icon: <LineChart className="w-6 h-6 text-blue-600" />,
                 title: "Price History",
-                description: "Analyze price trends over time with beautiful, interactive charts.",
-                delay: 0.4
+                description: "Analyze price trends over time with beautiful, interactive charts."
               }
             ].map((feature, idx) => (
               <motion.div 
                 key={idx}
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: feature.delay }}
-                className="group relative bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                variants={itemVariants}
+                className="group relative bg-white p-8 rounded-3xl shadow-sm border border-gray-100 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity duration-500"></div>
                 <div className="relative">
-                  <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-white group-hover:shadow-sm transition-all text-indigo-600">
+                  <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 border border-gray-100 group-hover:scale-110 group-hover:bg-white group-hover:shadow-md transition-all duration-300 text-indigo-600">
                     {feature.icon}
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
@@ -188,7 +230,7 @@ export default function LandingPage() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </main>
 
