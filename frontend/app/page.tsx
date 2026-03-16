@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, TrendingDown, Clock, Bell, LineChart, ShoppingBag } from 'lucide-react';
+import { ArrowRight, TrendingDown, Bell, LineChart, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LandingPage() {
@@ -20,7 +20,7 @@ export default function LandingPage() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: "easeOut" as const }
     },
   };
 

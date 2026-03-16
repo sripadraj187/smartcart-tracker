@@ -27,8 +27,8 @@ export default function AddProductModal({ isOpen, onClose, onAdded }: AddProduct
       setUrl('');
       onAdded();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to add product. Make sure the URL is accessible.');
+    } catch (err) {
+      setError((err as {response?: {data?: {error?: string}}}).response?.data?.error || 'Failed to add product. Make sure the URL is accessible.');
     } finally {
       setIsLoading(false);
     }

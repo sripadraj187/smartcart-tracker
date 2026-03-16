@@ -22,8 +22,8 @@ export default function Login() {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed');
+    } catch (err) {
+      setError((err as {response?: {data?: {error?: string}}}).response?.data?.error || 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +72,7 @@ export default function Login() {
           </form>
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
                 Register here
               </Link>

@@ -18,9 +18,9 @@ export default function Dashboard() {
     try {
       const res = await api.get('/products');
       setProducts(res.data);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      if (err.response?.status === 401) router.push('/login');
+      if ((err as {response?: {status?: number}}).response?.status === 401) router.push('/login');
     } finally {
       setIsLoading(false);
     }
@@ -32,6 +32,7 @@ export default function Dashboard() {
       return;
     }
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (id: number) => {
@@ -39,7 +40,7 @@ export default function Dashboard() {
       try {
         await api.delete(`/products/${id}`);
         fetchProducts();
-      } catch (err) {
+      } catch {
         alert('Failed to delete product');
       }
     }
@@ -81,7 +82,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((prop: any) => (
+            {products.map((prop: { id: number; product_title: string; current_price: number; product_image: string; product_url: string; user_id: number; created_at: string; }) => (
               <ProductCard key={prop.id} product={prop} onDelete={handleDelete} />
             ))}
           </div>

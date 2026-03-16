@@ -31,7 +31,7 @@ ChartJS.register(
 export default function ProductDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<{price: number, checked_at: string}[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export default function ProductDetail() {
     };
 
     if (id) fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const chartData = {
@@ -83,7 +84,7 @@ export default function ProductDetail() {
     scales: {
       y: {
         ticks: {
-          callback: function(value: any) {
+          callback: function(value: number | string) {
             return '₹' + value;
           }
         }

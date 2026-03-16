@@ -20,8 +20,8 @@ export default function Register() {
     try {
       await api.post('/auth/register', { email, password });
       router.push('/login');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+    } catch (err) {
+      setError((err as {response?: {data?: {error?: string}}}).response?.data?.error || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
